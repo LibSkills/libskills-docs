@@ -1,136 +1,265 @@
 # LibSkills Roadmap
 
-**Rome wasn't built in a day. Neither is a knowledge layer.**
+**From zero to protocol. One step at a time.**
+
+This is not an ideal roadmap. This is a roadmap that will not be crushed by complexity.
+Every phase proves value before moving to the next.
 
 ---
 
-## Phase 0: Foundation — The Minimal Viable Protocol
+## Phase 0 — Define the Core (1-3 days)
 
-**Goal:** One repo, one schema, one CLI, one skill. Prove the concept.
+**No code. Do not write code.**
 
 ### Deliverables
 
-| Item | Description | Status |
-|------|-------------|--------|
-| **skill schema v1** | A single JSON that defines what a skill is | ✅ Done |
-| **specification** | SPEC.md describing the protocol | ✅ Done |
-| **constitution** | PHILOSOPHY.md — the seven rules and boundaries | ✅ Done |
-| **CLI: `search`** | `libskills search cpp logging` — fuzzy match over registry index | 🚧 |
-| **CLI: `get`** | `libskills get cpp/gabime/spdlog` — download to local cache | 🚧 |
-| **CLI: `info`** | `libskills info spdlog` — show skill metadata | 🚧 |
-| **CLI: `update`** | `libskills update` — refresh registry index | 🚧 |
-| **first skill** | spdlog — complete, high-quality reference skill | 🚧 |
-| **validation** | Compare AI code quality *with* vs *without* skills | 📅 |
-| **registry** | Add 2-3 more core skills (fmt, nlohmann_json) | 📅 |
+| Item | Status |
+|------|--------|
+| One sentence: what is LibSkills? | ✅ "Behavioral Knowledge Layer for open-source libraries" |
+| Boundaries: WHAT_LIBSKILLS_IS_NOT.md | ✅ Covered in PHILOSOPHY.md |
+| Minimal schema: skill.json with only required fields | ✅ Defined in SPEC.md |
 
-### Explicitly NOT in Phase 0
+### What Phase 0 produces
 
+```
+philosophy + schema + boundary
+```
+
+---
+
+## Phase 1 — Build the First Skill (3-7 days)
+
+**Do not write a CLI. Prove the skill works first.**
+
+### Goal
+
+Build one complete, high-quality skill and verify that it makes AI agents produce better code.
+
+### Recommended first skill
+
+**spdlog** — C++ logging library. Everyone uses it. Many misuse it.
+
+### Directory structure
+
+```
+skills/
+└── cpp/
+    └── gabime/
+        └── spdlog/
+            ├── skill.json
+            ├── overview.md
+            ├── pitfalls.md
+            ├── lifecycle.md
+            ├── threading.md
+            └── examples/
+```
+
+### Success criteria
+
+Can an AI agent produce correct, safe spdlog code after reading the skill?
+If the answer is "yes" — Phase 1 is complete.
+
+---
+
+## Phase 2 — CLI MVP (1-2 weeks)
+
+**Not a full CLI. Only what the core loop needs.**
+
+### Commands
+
+| Command | Purpose | Priority |
+|---------|---------|----------|
+| `libskills search <keyword>` | Fuzzy search registry index | P0 |
+| `libskills get <path>` | Download skill to local cache | P0 |
+| `libskills info <path>` | Show skill metadata | P0 |
+
+### Architecture
+
+```
+~/.libskills/
+├── cache/       # Downloaded skills
+├── index.json   # Local index snapshot
+└── config.toml  # CLI configuration
+```
+
+### Explicitly NOT in Phase 2
+
+- Server / daemon / MCP
 - Embedding / vector search
 - AI-generated skills
-- MCP / HTTP protocol server
-- Semantic search
-- Ranking / trust engine
-- Distributed resolver
+- Registry mirror / distributed registry
 - Plugin system
-- Authentication / accounts
-- GUI of any kind
-- Multi-registry support
+- Authentication
+- GUI
 
-**Phase 0 constraint:** Only `filesystem + JSON + markdown + cache`.
-If only one person maintains it, it must still work.
+### Constraint
 
----
+```
+filesystem + JSON + markdown + cache = all you need
+```
 
-## Phase 1: Community — Make It Usable by Others
-
-**Goal:** People can contribute skills and rely on the CLI in real projects.
-
-### Deliverables
-
-| Item | Description |
-|------|-------------|
-| **`libskills list`** | List cached skills with metadata |
-| **`libskills doctor`** | Validate a locally cached skill against the schema |
-| **`libskills init`** | Generate a skill template for contributors |
-| **Community review** | Add a CONTRIBUTING.md review process for Tier 1 |
-| **Tier 2 support** | Allow community PRs without strict review |
-| **Skill inheritance** | redis-py → redis; basic `requires` field |
-| **Global index** | `index.json` with all skills for fast search |
-| **CI integrity check** | GitHub Action validating PRs against schema |
-| **5-10 more skills** | Core C++ + Rust + Python libraries |
-| **Publish `cargo install`** | CLI on crates.io |
-
-### Key metric
-**Can a new contributor submit a Tier 2 skill in under 15 minutes?**
+**If only one person maintains this, it must still work.**
 
 ---
 
-## Phase 2: Discovery — Make Skills Findable
+## Phase 3 — Registry Structure (1-2 weeks)
 
-**Goal:** AI agents and IDEs can discover skills automatically.
+**Organize the skills into a proper repository.**
 
-| Item | Description |
-|------|-------------|
-| **`libskills find`** | Semantic search / intent matching |
-| **`libskills discover`** | Auto-scan Cargo.toml / CMakeLists.txt / requirements.txt |
-| **`libskills cache`** | Manage local cache (clear, prune, refresh) |
-| **`libskills serve` (MCP)** | Expose skills via Model Context Protocol |
-| **IDE integration** | VS Code / JetBrains plugin |
-| **Skill auto-load** | Detect `import spdlog` → preload skill |
-| **Repository `.libskills/`** | Authors can ship skills in their own repos |
-| **Private registry** | Enterprise `~/.libskills/private/` support |
-| **30+ skills** | Expanded registry across languages |
+### Repositories
 
-### Key metric
-**How much does first-compile success rate improve with skill preloading?**
+| Repository | Purpose |
+|------------|---------|
+| LibSkills/LibSkills | Project root — README linking to sub-repos |
+| libskills-schema | JSON Schema definitions |
+| libskills-registry | Skill files organized by language/author/name |
+| libskills-cli | Rust CLI source |
+| libskills-docs | Philosophy, specification, roadmap |
 
----
+### Registry layout
 
-## Phase 3: Intelligence — Close the Feedback Loop
-
-**Goal:** Skills improve themselves based on real usage data.
-
-| Item | Description |
-|------|-------------|
-| **Skill usage analytics** | Which skills reduce errors most? |
-| **Cross-language primitives** | `async_runtime_shutdown`, `ownership_transfer` etc. |
-| **Skill graph** | spdlog → fmt → allocator — auto-load dependency skills |
-| **Skill packs** | `backend-pack` → postgres + redis + grpc + logging |
-| **Skill timeline** | Track best practices across library versions |
-| **Community rankings** | Stars, votes, freshness, issue health |
-| **1000+ skills** | Broad coverage across ecosystems |
-
-### Key metric
-**Library integration time: how fast can an AI use a new library?**
+```
+registry/
+├── index.json
+├── cpp/
+│   ├── gabime/
+│   │   └── spdlog/
+│   └── nlohmann/
+│       └── json/
+├── rust/
+│   └── tokio-rs/
+│       └── tokio/
+└── python/
+    └── psf/
+        └── requests/
+```
 
 ---
 
-## Phase 4: Protocol — Become the Standard
+## Phase 4 — Real Validation (2-4 weeks)
 
-**Goal:** LibSkills is the de facto way to package library knowledge.
+**This is the most important phase. Prove the thesis.**
 
-| Item | Description |
-|------|-------------|
-| **Enterprise private registries** | Self-hosted skill servers |
-| **Global resolver network** | DNS-like discovery across registries |
-| **Skill confidence scoring** | Consensus across multiple sources |
-| **Skill DSL** | Machine-readable constraint language |
-| **Knowledge primitives** | Reusable patterns across languages |
-| **Standard adoption** | IDE built-in support, CI integrations |
+### Experiment
 
-### Key metric
-**"How many libraries have skills?" → "How many *don't*?"**
+**Without skill:** AI generates code using an unfamiliar library.
+**With skill:** AI reads the skill first, then generates.
+
+### Metrics to track
+
+| Metric | Description |
+|--------|-------------|
+| First-compile rate | Code compiles on first attempt |
+| Bug count | Runtime errors, crashes, logic bugs |
+| Hallucination rate | Incorrect API calls that don't exist |
+| Token cost | Tokens consumed to reach correct code |
+| Iteration count | Number of "fix this" rounds |
+| Integration time | How fast a new library becomes usable |
+
+### Output
+
+First batch of real evidence that skills reduce AI errors.
 
 ---
 
-## The KISS Commitment
+## Phase 5 — Expand Skills (1-2 months)
 
-**Every feature in every phase must pass this test:**
+**Do not expand features. Expand high-quality skills.**
 
-> "Is this directly accelerating the core loop?"
+### Languages (first batch)
+
+| Language | Priority |
+|----------|----------|
+| C++ | spdlog, fmt, asio, nlohmann/json |
+| Rust | tokio, serde, reqwest |
+| Python | requests, fastapi |
+
+### Output
+
+A trusted Skill Corpus of 10-20 high-quality skills.
+
+---
+
+## Phase 6 — Contribution Experience (1-2 months)
+
+**Lower the barrier for skill authors.**
+
+### New CLI commands
+
+| Command | Purpose |
+|---------|---------|
+| `libskills init` | Generate skill template |
+| `libskills doctor` | Validate skill against schema |
+
+### Tier 2 support
+
+Allow community PRs. Lightweight review process.
+
+---
+
+## Phase 7 — Search Upgrade (only when needed)
+
+**Do not do this until plain search is genuinely insufficient.**
+
+- `libskills find "async logger with rotation"` — semantic / intent search
+- Embeddings + ranking + trust score (only if needed)
+
+---
+
+## Phase 8 — Repository Skill Support (only when needed)
+
+**Do not do this until someone asks to ship skills in their own repo.**
+
+- `.libskills/` directory in library repositories
+- `libskills resolve <library>` — auto-discover from multiple sources
+
+---
+
+## Phase 9 — Protocol (future)
+
+**Do not do this until multiple clients exist.**
+
+- Formal LibSkills Spec as a standalone standard
+- "Any repository can carry a skill" — LibSkills becomes a protocol, not a platform
+
+---
+
+## Phase 10 — AI Integration (future)
+
+- MCP server
+- IDE plugins (VS Code, JetBrains)
+- CI checks for misuse patterns
+- Agent-native knowledge loading
+
+---
+
+## The KISS Law
+
+**Every feature must pass this test:**
+
+> Is this directly accelerating the core loop?
 >
 > `Discover → Get → Read → Reduce errors`
 
-**No feature is added before pain proves it needs to exist.**
+**Never add a feature before pain proves it needs to exist.**
 
-Complexity is not earned by ambition. It is earned by proof.
+### The right order
+
+```
+1. Prove value          ← You are here
+2. Expand ecosystem
+3. Protocolize
+4. Platformize
+```
+
+### Wrong order (trap)
+
+```
+Design Phase 9 during Phase 2.
+```
+
+### Guardrails
+
+- If tomorrow only you maintain it, does it still work? If not, it's too complex.
+- All complexity must be *proven necessary*, not "might be needed later."
+- When in doubt: do the next step. Not the future.
