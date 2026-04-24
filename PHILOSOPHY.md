@@ -4,11 +4,24 @@
 
 ---
 
+## The Core Belief
+
+LibSkills exists for one reason: **to reduce the cost of mistakes in software development.**
+
+Code is getting easier to generate. Understanding is getting more expensive.
+The hard part is no longer *writing* — it's *judging, integrating, and knowing the constraints.*
+
+LibSkills is not a knowledge base. It is a **risk perception layer.**
+
+---
+
 ## What LibSkills Is
 
 LibSkills is a **Behavioral Knowledge Layer** for open-source libraries.
 
-It exists to answer one question: *"What must an AI agent know to use this library safely?"*
+It answers the question: *"What must an AI agent know to use this library safely?"*
+
+---
 
 ## What LibSkills Is NOT
 
@@ -19,6 +32,35 @@ It exists to answer one question: *"What must an AI agent know to use this libra
 - **Not** a tutorial platform — we don't teach fundamentals
 - **Not** a search engine — we serve pre-compiled, curated knowledge
 - **Not** a StackOverflow replacement — we capture behavioral contracts, not opinions
+- **Not** an AI copilot — we are the safety layer *under* the copilot
+
+---
+
+## The Filtering Philosophy
+
+The world does not lack information. It lacks **knowing what matters.**
+
+Most knowledge systems assume all information has equal value. It does not.
+
+For spdlog:
+- `logger->info("hello")` — unimportant
+- Async logger lifecycle ordering — critical
+- Flush-before-destroy requirement — critical
+- Signal handler unsafety — critical
+
+LibSkills is not a knowledge library. It is an **importance engine.**
+
+---
+
+## The Three Layers
+
+```
+Source code     →  What the library *can* do
+Documentation   →  How to do it
+Skill           →  Where it *will break*
+```
+
+This is the clearest model of what LibSkills contributes.
 
 ---
 
@@ -28,7 +70,7 @@ It exists to answer one question: *"What must an AI agent know to use this libra
 
 A skill must never duplicate content that already exists in the library's official documentation. If the user needs API reference, they should read the docs. The skill captures what the docs *don't* say: constraints, pitfalls, lifecycle, hidden behaviors.
 
-### Rule 2: Only high-value behavioral knowledge
+### Rule 2: Only high-cost knowledge
 
 Every piece of knowledge in a skill must answer at least one of:
 - "Where is this library most likely to crash?"
@@ -40,7 +82,7 @@ If a piece of knowledge doesn't reduce error probability, it doesn't belong in t
 
 ### Rule 3: Error reduction > knowledge accumulation
 
-A skill with 5 carefully chosen pitfalls is more valuable than a skill with 50 facts. The primary metric of a skill's quality is: *how many AI mistakes does it prevent?* Not: *how much does it cover?*
+A skill with 5 carefully chosen pitfalls is more valuable than a skill with 50 facts. The primary metric: *how many AI mistakes does it prevent?* Not: *how much does it cover?*
 
 ### Rule 4: Machine-readable constraints
 
@@ -56,7 +98,75 @@ Every skill must declare which library version(s) it targets. A skill for spdlog
 
 ### Rule 7: Trust-graded
 
-Every skill must carry a trust score (0–100) and declare its tier (tier1 or tier2), author type (official, community, enterprise, ai_generated), and stability level (experimental, stable, deprecated). AI agents use these signals to decide how much to trust the knowledge.
+Every skill must carry a trust score (0-100) and declare its tier (tier1 or tier2), author type (official, community, enterprise, ai_generated), and stability level (experimental, stable, deprecated). AI agents use these signals to decide how much to trust the knowledge.
+
+---
+
+## Documentation vs. Skill
+
+```
+Documentation describes.
+Skill reminds.
+```
+
+Documentation says: "This library can do X."
+Skill says: "This is where it will break."
+
+---
+
+## Completeness vs. Correctness
+
+Skill should not pursue completeness. Completeness means redundancy.
+
+Pursue **enough correctness**: the AI doesn't need to know everything. It only needs to avoid critical errors.
+
+---
+
+## Pre-understanding
+
+Traditional AI workflow:
+```
+Encounter library → Learn on the fly → Guess → Generate
+```
+
+LibSkills workflow:
+```
+Encounter library → Load pre-compiled experience → Generate
+```
+
+This is what human expertise looks like: experts don't know more. They know **which parts are dangerous.**
+
+---
+
+## The Goal
+
+LibSkills is **cognitive compression**:
+- A human needs hours of reading, debugging, and crashes to learn spdlog's async lifecycle
+- A skill compresses that into 1500 tokens
+
+Software engineering's largest cost is not writing code. It is **the cost of understanding.**
+
+---
+
+## Success Metrics
+
+LibSkills measures success by:
+
+1. **AI hallucination rate** — fewer incorrect API calls after skill consumption
+2. **First-compile success rate** — code that compiles on the first try
+3. **Iteration count** — fewer "fix this" rounds
+4. **Integration time** — how fast a new library becomes usable
+5. **Skill corpus quality** — completeness threshold across the registry
+
+---
+
+## What This Makes Possible
+
+- **AI agents** that never guess a library API
+- **IDEs** that surface constraints during autocomplete
+- **CI systems** that check for misuse patterns
+- **Enterprise teams** that standardize library usage across thousands of developers
+- **A new software layer**: source → package manager → runtime → **knowledge layer** → docs
 
 ---
 
@@ -70,60 +180,6 @@ A skill file is valid whether it lives in:
 - An enterprise private registry
 - A local directory (`~/.libskills/private/`)
 
-The CLI (`libskills`) acts as a **resolver**: given a library name, it discovers the best available skill by checking local cache → registry → upstream repository → mirrors.
+The CLI acts as a **resolver**: given a library name, it discovers the best available skill by checking local cache → registry → upstream repository → mirrors.
 
-This means LibSkills is a **protocol first, platform second**. The registry is a convenience, not a monopoly.
-
----
-
-## The Knowledge Primitive
-
-Knowledge in LibSkills is organized in three layers:
-
-```
-Library          →  spdlog
-Capability       →  async logging
-Constraint       →  must flush before destroy
-```
-
-The atomic unit is the **knowledge atom**:
-
-```json
-{
-  "type": "constraint",
-  "layer": "lifecycle",
-  "content": "must flush before destroy",
-  "kind": "fact",
-  "language": ["cpp"],
-  "introduced_in": "1.0",
-  "deprecated_in": null
-}
-```
-
-This structure allows:
-- Cross-language patterns (async shutdown is the same problem in C++, Rust, Python)
-- Machine-readable enforcement
-- Composition across skills
-- Downstream tooling (static analysis, linting, CI checks)
-
----
-
-## Success Metrics
-
-LibSkills measures success not by stars or downloads, but by:
-
-1. **AI hallucination rate**: How many fewer incorrect API calls occur after skill consumption?
-2. **First-compile success rate**: Can the AI generate code that compiles on the first try?
-3. **Iteration count**: How many fewer rounds of "fix this" does the AI need?
-4. **Integration time**: How much faster does a new library become usable?
-5. **Skill corpus quality**: What percentage of skills meet the completeness threshold?
-
----
-
-## What This Makes Possible
-
-- **AI agents** that never guess a library API
-- **IDEs** that surface constraints during autocomplete
-- **CI systems** that check for misuse patterns
-- **Enterprise teams** that standardize library usage across thousands of developers
-- **A new software layer**: source code → package manager → runtime → **knowledge layer** → docs
+LibSkills is a **protocol first, platform second.**
