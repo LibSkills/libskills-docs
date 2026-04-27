@@ -1,0 +1,14 @@
+[book]
+authors = ["LibSkills Org"]
+language = "en"
+title = "LibSkills"
+
+[output.html]
+git-repository-url = "https://github.com/LibSkills"
+edit-url-template = "https://github.com/LibSkills/libskills-docs/edit/main/{path}"
+
+[output.html.search]
+enable = true
+
+[build]
+build-dir = "../site"
