@@ -172,14 +172,25 @@ LibSkills measures success by:
 
 ## Skill as Protocol, Not Repository
 
-LibSkills defines a **format and a contract**, not a storage location.
+LibSkills defines a **format and a contract**, not a storage location. The standard is the product.
 
 A skill file is valid whether it lives in:
-- The official LibSkills registry
-- The library's own repository (`.libskills/`)
-- An enterprise private registry
-- A local directory (`~/.libskills/private/`)
+- The library's own repository (`.libskills/`) — *primary, decentralized source*
+- The official LibSkills aggregation registry — *convenience discovery layer*
+- An enterprise private registry — *internal use*
+- A local directory (`~/.libskills/private/`) — *personal use*
 
-The CLI acts as a **resolver**: given a library name, it discovers the best available skill by checking local cache → registry → upstream repository → mirrors.
+The `.libskills/` directory convention is the foundation. Like `.editorconfig`, `package.json`, or `Dockerfile`, it is a convention any repository can adopt without registration, approval, or gatekeeping.
+
+The aggregation registry exists to **accelerate discovery**, not to **control** distribution. It crawls GitHub repositories for `.libskills/` directories and provides search, caching, and quality signals.
+
+The CLI acts as a **resolver**: given a library name, it discovers the best available skill by checking local cache → aggregation index → upstream repository → mirrors.
 
 LibSkills is a **protocol first, platform second.**
+
+### Why Standard-First
+
+- **Network effects via convention**: If `.libskills/` becomes the standard way to describe library behavior for AI, every AI tool learns to look for it — without a central server
+- **Zero-friction adoption**: A library author adds `.libskills/` to their repo. Done. No registration, no PR, no approval
+- **Survives the platform**: Even if the LibSkills registry disappears, the standard lives on in every repository that adopted the convention
+- **The value is the format, not the database**: npm's value is `package.json`, not registry.npmjs.org. Docker's value is `Dockerfile`, not Docker Hub. LibSkills' value is `skill.json` + `.libskills/`, not the aggregation index

@@ -4,29 +4,57 @@
 
 Part of the [LibSkills](https://github.com/LibSkills) ecosystem — the Behavioral Knowledge Layer for open-source libraries.
 
-This repository is the single source of truth for how LibSkills works, what it stands for, and where it's going.
+## Documentation
 
-## Documents
+### Concepts
+Understand the design and philosophy.
 
 | Document | Description |
 |----------|-------------|
-| [PHILOSOPHY.md](./PHILOSOPHY.md) | Project constitution — the seven rules, boundaries, and core values |
-| [ROADMAP.md](./ROADMAP.md) | Phased plan from first skill to protocol — 10 phases |
-| [SPEC.md](./SPEC.md) | LibSkills Protocol specification — skill format, registry, CLI, AI reading order |
-| [GOVERNANCE.md](./GOVERNANCE.md) | Tier 1/Tier 2 rules, main/contrib classification, maintainer roles |
-| [CONTRIBUTING.md](./CONTRIBUTING.md) | How to submit skills — tiers, review process, templates |
+| [Skill Anatomy](concepts/skill-anatomy.md) | File structure, priority system, token limits |
+| [Trust System](concepts/trust-system.md) | Tiers, groups, trust scores, risk levels |
 
-## Repositories
+### Guides
+Practical how-tos for using LibSkills.
 
-| Repository | Description |
-|------------|-------------|
-| [LibSkills](https://github.com/LibSkills/LibSkills) | Project root — README, LICENSE, logo |
+| Document | Description |
+|----------|-------------|
+| [Quickstart](guides/quickstart.md) | Get running in 5 minutes |
+| [Authoring Guide](guides/authoring.md) | How to write a high-quality skill |
+| [Integrating with AI](guides/integrating.md) | How to connect LibSkills to AI agents and CI |
+
+### Reference
+Technical specifications and API docs.
+
+| Document | Description |
+|----------|-------------|
+| [CLI Commands](reference/cli-commands.md) | Complete CLI reference (11 commands) |
+| [HTTP API](reference/api.md) | REST API reference (6 endpoints) |
+| [JSON Schema](reference/schema.md) | skill.json and index.json schema reference |
+| [Versioning](reference/VERSIONING.md) | Semantic versioning policy |
+| [Extensions](reference/EXTENSIONS.md) | Ecosystem extension mechanism |
+
+### Specification
+The definitive standard.
+
+| Document | Description |
+|----------|-------------|
+| [SPEC.md](SPEC.md) | LibSkills Specification v1.0 — the complete protocol standard |
+| [PHILOSOPHY.md](PHILOSOPHY.md) | Project constitution and core values |
+| [ROADMAP.md](ROADMAP.md) | Development roadmap (Phase 0–10) |
+| [GOVERNANCE.md](GOVERNANCE.md) | Governance rules for tiers and groups |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute skills |
+
+## Related Repositories
+
+| Repository | Role |
+|------------|------|
+| [libSkills](https://github.com/LibSkills/LibSkills) | Organization landing page |
 | [libskills-schema](https://github.com/LibSkills/libskills-schema) | JSON Schema definitions |
-| [libskills-registry](https://github.com/LibSkills/libskills-registry) | Official skill files |
-| [libskills-cli](https://github.com/LibSkills/libskills-cli) | Rust CLI |
+| [libskills-registry](https://github.com/LibSkills/libskills-registry) | Aggregated skill index + skill files |
+| [libskills-cli](https://github.com/LibSkills/libskills-cli) | Rust CLI tool |
 | [libskills-protocol](https://github.com/LibSkills/libskills-protocol) | MCP/HTTP protocol (future) |
-| [libskills-docs](https://github.com/LibSkills/libskills-docs) | **You are here** |
 
 ## License
 
-Apache 2.0
+[Apache 2.0](../libSkills/LICENSE)
