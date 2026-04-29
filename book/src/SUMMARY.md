@@ -22,6 +22,9 @@
 - [Versioning](reference/VERSIONING.md)
 - [Extensions](reference/EXTENSIONS.md)
 
+# Experiments
+- [Phase 4: Value Validation](experiments/phase4-report.md)
+
 # About
 - [Philosophy](PHILOSOPHY.md)
 - [Roadmap](ROADMAP.md)
